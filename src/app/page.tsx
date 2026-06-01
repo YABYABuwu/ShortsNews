@@ -18,6 +18,7 @@ interface Article {
   summary: string;
   original_url?: string;
   source?: string;
+  image_url?: string;
   created_at: string;
   category_id?: string;
   categories?: Category | Category[] | null;

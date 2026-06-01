@@ -6,6 +6,7 @@ export interface ArticleInput {
   original_url?: string;
   source?: string;
   category_id?: string;
+  image_url?: string;
 }
 
 // ==========================================
@@ -88,6 +89,7 @@ export async function fetchArticles(searchQuery?: string, categoryId?: string) {
       summary,
       original_url,
       source,
+      image_url,
       created_at,
       category_id,
       categories:category_id (id, name, slug)
