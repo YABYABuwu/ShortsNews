@@ -52,7 +52,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         {article.image_url ? (
           <div className="relative h-44 w-full overflow-hidden bg-slate-950 border-b border-slate-800/40">
             <img 
-              src={article.image_url} 
+              src={`/api/proxy-image?url=${encodeURIComponent(article.image_url)}`}
               alt={article.title} 
               className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
               loading="lazy"

@@ -101,7 +101,7 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
         {article.image_url && (
           <div className="relative h-48 sm:h-64 w-full overflow-hidden bg-slate-950 shrink-0">
             <img 
-              src={article.image_url} 
+              src={`/api/proxy-image?url=${encodeURIComponent(article.image_url)}`}
               alt={article.title} 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
