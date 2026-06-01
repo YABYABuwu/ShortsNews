@@ -56,6 +56,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
               alt={article.title} 
               className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
               loading="lazy"
+              referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
           </div>

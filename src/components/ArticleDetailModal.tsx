@@ -104,6 +104,7 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
               src={article.image_url} 
               alt={article.title} 
               className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
             />
             {/* Top gradient shadow overlays to blend cover nicely */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-slate-950/20" />
