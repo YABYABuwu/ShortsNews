@@ -1,7 +1,7 @@
 'use client';
 
 import { X, Calendar, ExternalLink, Sparkles, BookOpen } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Category {
   id: string;
@@ -28,10 +28,13 @@ interface ArticleDetailModalProps {
 }
 
 export default function ArticleDetailModal({ article, isOpen, onClose }: ArticleDetailModalProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setIsScrolled(false);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -74,8 +77,16 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
 
   const points = parseSummaryPoints(article.summary);
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (e.currentTarget.scrollTop > 50) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 animate-in fade-in duration-200">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity duration-300 ease-out"
@@ -83,45 +94,67 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 ease-out flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 ease-out flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-300">
         
         {/* Decorative Top Glow */}
-        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 z-10" />
+        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 z-30" />
 
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-slate-950/80 hover:bg-slate-900 border border-slate-850/80 text-slate-400 hover:text-slate-200 transition-all duration-200 z-20 backdrop-blur-sm"
-          aria-label="Close"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {/* Header */}
-        <div className="p-6 pb-4 border-b border-slate-850 flex flex-col space-y-3 relative">
-          <div className="flex items-center space-x-3">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-              {getCategoryName()}
-            </span>
-            {article.source && (
-              <span className="text-xs font-medium text-slate-400">
-                แหล่งข่าว: <span className="text-slate-300 font-semibold">{article.source}</span>
-              </span>
-            )}
-          </div>
-          
-          <h2 className="text-xl sm:text-2xl font-bold text-white leading-snug pr-8">
+        {/* Sticky Mini Header (blurs/fades-in on scroll) */}
+        <div className={`absolute top-0 inset-x-0 h-14 flex items-center justify-between px-6 border-b transition-all duration-300 ease-in-out z-20 ${
+          isScrolled 
+            ? 'bg-slate-900/90 backdrop-blur-md border-slate-800/80 shadow-md' 
+            : 'bg-transparent border-transparent'
+        }`}>
+          {/* Mini Slide-in Title */}
+          <span className={`text-sm font-bold text-slate-200 truncate pr-14 transition-all duration-300 transform ${
+            isScrolled 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 -translate-y-2 pointer-events-none'
+          }`}>
             {article.title}
-          </h2>
-
-          <div className="flex items-center text-xs text-slate-500 space-x-1.5 pt-1">
-            <Calendar className="w-3.5 h-3.5" />
-            <span>{formattedDate}</span>
-          </div>
+          </span>
+          
+          {/* Close Button - positioned inside sticky header area */}
+          <button
+            onClick={onClose}
+            className={`p-1.5 rounded-full border transition-all duration-200 backdrop-blur-sm absolute right-4 top-1/2 -translate-y-1/2 ${
+              isScrolled
+                ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200 hover:text-white'
+                : 'bg-slate-950/80 hover:bg-slate-900 border-slate-850/80 text-slate-400 hover:text-slate-200'
+            }`}
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Content Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar">
+        {/* Scrollable Content Body */}
+        <div 
+          onScroll={handleScroll}
+          className="px-6 pb-6 pt-16 overflow-y-auto space-y-6 flex-1 custom-scrollbar"
+        >
+          {/* Main Title Header (Scrolls away) */}
+          <div className="flex flex-col space-y-3 pb-4 border-b border-slate-850/50">
+            <div className="flex items-center space-x-3">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                {getCategoryName()}
+              </span>
+              {article.source && (
+                <span className="text-xs font-medium text-slate-400">
+                  แหล่งข่าว: <span className="text-slate-300 font-semibold">{article.source}</span>
+                </span>
+              )}
+            </div>
+            
+            <h2 className="text-xl sm:text-2xl font-black text-white leading-snug">
+              {article.title}
+            </h2>
+
+            <div className="flex items-center text-xs text-slate-500 space-x-1.5 pt-0.5">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>{formattedDate}</span>
+            </div>
+          </div>
           
           {/* Cover Image in Scrollable Body */}
           {article.image_url && (
@@ -170,7 +203,7 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
         </div>
 
         {/* Footer */}
-        <div className="p-6 bg-slate-950/80 border-t border-slate-850 flex flex-col sm:flex-row items-center gap-4 justify-between">
+        <div className="p-6 bg-slate-950/85 border-t border-slate-850 flex flex-col sm:flex-row items-center gap-4 justify-between z-10">
           <div className="flex items-center text-xs text-slate-500 space-x-1.5">
             <BookOpen className="w-4 h-4" />
             <span>อ่านเพื่อรับข้อมูลสรุปที่รวดเร็ว</span>
