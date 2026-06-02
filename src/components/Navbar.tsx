@@ -42,47 +42,47 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
-              <span className="bg-gradient-to-r from-cyan-400 to-indigo-500 text-transparent bg-clip-text font-extrabold text-2xl tracking-wider transition-all group-hover:scale-105">
+              <span className="bg-gradient-to-r from-cyan-400 to-indigo-500 text-transparent bg-clip-text font-extrabold text-xl sm:text-2xl tracking-wider transition-all group-hover:scale-105">
                 SHORTS<span className="text-white">NEWS</span>
               </span>
             </Link>
           </div>
 
           {/* Navigation Links */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-1 sm:space-x-3">
             <Link
               href="/"
-              className="flex items-center space-x-1 text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+              className="flex items-center space-x-1 text-slate-300 hover:text-cyan-400 px-2 sm:px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
             >
               <BookOpen className="w-4 h-4" />
-              <span>Dashboard</span>
+              <span className="hidden sm:inline">Dashboard</span>
             </Link>
 
             {user && (
               <Link
                 href="/admin"
-                className="flex items-center space-x-1 text-slate-300 hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                className="flex items-center space-x-1 text-slate-300 hover:text-indigo-400 px-2 sm:px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
               >
                 <PlusSquare className="w-4 h-4" />
-                <span>Create Post</span>
+                <span className="hidden sm:inline">Create Post</span>
               </Link>
             )}
 
-            <div className="border-l border-slate-700 h-6 mx-2 hidden sm:block"></div>
+            <div className="border-l border-slate-700 h-6 mx-1 sm:mx-2 hidden xs:block"></div>
 
             {loading ? (
-              <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin"></div>
+              <div className="w-6 h-6 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin"></div>
             ) : user ? (
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="flex items-center space-x-1.5 bg-slate-800/80 p-2 sm:px-3 sm:py-1.5 rounded-full border border-slate-700">
                   <UserIcon className="w-4 h-4 text-cyan-400" />
-                  <span className="text-xs text-slate-200 max-w-[120px] truncate">
+                  <span className="text-xs text-slate-200 max-w-[100px] truncate hidden md:inline">
                     {user.user_metadata?.full_name || user.email}
                   </span>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center space-x-1 bg-red-950/40 text-red-400 hover:bg-red-900/60 hover:text-red-300 border border-red-900/60 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+                  className="flex items-center space-x-1 bg-red-950/40 text-red-400 hover:bg-red-900/60 hover:text-red-300 border border-red-900/60 p-2 sm:px-3 sm:py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:inline">Logout</span>
@@ -91,7 +91,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
-                className="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white shadow-md shadow-indigo-950/50 hover:shadow-cyan-950/50 px-4 py-2 rounded-lg text-sm font-bold tracking-wide transition-all duration-300 hover:scale-[1.02]"
+                className="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white shadow-md shadow-indigo-950/50 hover:shadow-cyan-950/50 px-3 sm:px-4 py-2 rounded-lg text-sm font-bold tracking-wide transition-all duration-300 hover:scale-[1.02]"
               >
                 Login
               </Link>
