@@ -97,20 +97,6 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
           <X className="w-5 h-5" />
         </button>
 
-        {/* Cover Image in Modal */}
-        {article.image_url && (
-          <div className="relative h-48 sm:h-64 w-full overflow-hidden bg-slate-950 shrink-0">
-            <img 
-              src={`/api/proxy-image?url=${encodeURIComponent(article.image_url)}`}
-              alt={article.title} 
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-            {/* Top gradient shadow overlays to blend cover nicely */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-slate-950/20" />
-          </div>
-        )}
-
         {/* Header */}
         <div className="p-6 pb-4 border-b border-slate-850 flex flex-col space-y-3 relative">
           <div className="flex items-center space-x-3">
@@ -136,6 +122,19 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar">
+          
+          {/* Cover Image in Scrollable Body */}
+          {article.image_url && (
+            <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-950 border border-slate-800 shrink-0 shadow-inner">
+              <img 
+                src={`/api/proxy-image?url=${encodeURIComponent(article.image_url)}`}
+                alt={article.title} 
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent" />
+            </div>
+          )}
           
           {/* AI Banner */}
           <div className="flex items-center space-x-2 bg-cyan-500/5 text-cyan-400 border border-cyan-500/10 p-3 rounded-lg text-xs font-medium">
