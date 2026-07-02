@@ -75,17 +75,24 @@ export default function Dashboard() {
   }, [loadArticles]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+    <div className="relative max-w-6xl mx-auto px-4 py-10 sm:px-6 lg:px-8 space-y-8 min-h-screen">
+      {/* Ambient background light blobs */}
+      <div className="absolute top-[-10%] left-[-20%] w-[500px] h-[500px] rounded-full bg-indigo-600/5 blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute bottom-[20%] right-[-20%] w-[600px] h-[600px] rounded-full bg-cyan-600/5 blur-[150px] pointer-events-none -z-10" />
+      
+      {/* Decorative cyber grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-[0.12] pointer-events-none -z-20" />
+
       {/* Header section */}
-      <div className="text-center space-y-3 py-4">
-        <div className="inline-flex items-center space-x-2 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
-          <Sparkles className="w-3.5 h-3.5" />
+      <div className="text-center space-y-4 py-8 relative">
+        <div className="inline-flex items-center space-x-2 bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md">
+          <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
           <span>AI-Powered News Summarizer</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          สรุปข่าวสั้น ทันทุกเหตุการณ์
+        <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          สรุปข่าวสั้น <span className="text-cyan-400">ทันทุกเหตุการณ์</span>
         </h1>
-        <p className="max-w-xl mx-auto text-sm sm:text-base text-slate-450 text-slate-400">
+        <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-400 leading-relaxed">
           ประหยัดเวลาอ่านข่าวด้วยบทสรุปใจความสำคัญที่กระชับ แม่นยำ และเข้าใจง่าย อัปเดตแบบเรียลไทม์
         </p>
       </div>

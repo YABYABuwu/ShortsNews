@@ -92,7 +92,7 @@ export async function fetchArticles(searchQuery?: string, categoryId?: string) {
       image_url,
       created_at,
       category_id,
-      categories:category_id (id, name, slug)
+      categories:category_id (id, name, slug, color, icon)
     `)
     .order('created_at', { ascending: false });
 

@@ -7,6 +7,8 @@ interface Category {
   id: string;
   name: string;
   slug: string;
+  color?: string;
+  icon?: string;
 }
 
 interface Article {
@@ -46,13 +48,24 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
   if (!isOpen) return null;
 
   // Extract category helper
-  const getCategoryName = () => {
-    if (!article.categories) return 'ทั่วไป';
+  const getCategoryData = () => {
+    if (!article.categories) return { name: 'ทั่วไป', color: '#6366f1', icon: '📰' };
     if (Array.isArray(article.categories)) {
-      return article.categories[0]?.name || 'ทั่วไป';
+      const cat = article.categories[0];
+      return {
+        name: cat?.name || 'ทั่วไป',
+        color: cat?.color || '#6366f1',
+        icon: cat?.icon || '📰'
+      };
     }
-    return article.categories.name || 'ทั่วไป';
+    return {
+      name: article.categories.name || 'ทั่วไป',
+      color: article.categories.color || '#6366f1',
+      icon: article.categories.icon || '📰'
+    };
   };
+
+  const catData = getCategoryData();
 
   const formattedDate = new Date(article.created_at).toLocaleDateString('th-TH', {
     year: 'numeric',
@@ -94,10 +107,23 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 ease-out flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-300">
+      <div className="relative w-full max-w-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-900 rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 ease-out flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-300">
         
+        {/* Dynamic backdrop glow matching the category color */}
+        <div 
+          style={{
+            background: `radial-gradient(circle at center, ${catData.color}15 0%, transparent 70%)`
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none -z-10 blur-2xl"
+        />
+
         {/* Decorative Top Glow */}
-        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 z-30" />
+        <div 
+          style={{
+            background: `linear-gradient(to right, ${catData.color}, ${catData.color}88)`
+          }}
+          className="absolute top-0 inset-x-0 h-1 z-30" 
+        />
 
         {/* Sticky Mini Header (blurs/fades-in on scroll) */}
         <div className={`absolute top-0 inset-x-0 h-14 flex items-center justify-between px-6 border-b transition-all duration-300 ease-in-out z-20 ${
@@ -119,8 +145,8 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
             onClick={onClose}
             className={`p-1.5 rounded-full border transition-all duration-200 backdrop-blur-sm absolute right-4 top-1/2 -translate-y-1/2 ${
               isScrolled
-                ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200 hover:text-white'
-                : 'bg-slate-950/80 hover:bg-slate-900 border-slate-850/80 text-slate-400 hover:text-slate-200'
+                ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200 hover:text-white cursor-pointer'
+                : 'bg-slate-950/80 hover:bg-slate-900 border-slate-850/80 text-slate-400 hover:text-slate-200 cursor-pointer'
             }`}
             aria-label="Close"
           >
@@ -134,10 +160,18 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
           className="px-6 pb-6 pt-16 overflow-y-auto space-y-6 flex-1 custom-scrollbar"
         >
           {/* Main Title Header (Scrolls away) */}
-          <div className="flex flex-col space-y-3 pb-4 border-b border-slate-850/50">
+          <div className="flex flex-col space-y-3 pb-4 border-b border-slate-900/60">
             <div className="flex items-center space-x-3">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                {getCategoryName()}
+              <span 
+                style={{
+                  backgroundColor: `${catData.color}12`,
+                  borderColor: `${catData.color}30`,
+                  color: catData.color,
+                }}
+                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border"
+              >
+                <span className="mr-1">{catData.icon}</span>
+                {catData.name}
               </span>
               {article.source && (
                 <span className="text-xs font-medium text-slate-400">
@@ -170,8 +204,15 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
           )}
           
           {/* AI Banner */}
-          <div className="flex items-center space-x-2 bg-cyan-500/5 text-cyan-400 border border-cyan-500/10 p-3 rounded-lg text-xs font-medium">
-            <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
+          <div 
+            style={{
+              backgroundColor: `${catData.color}08`,
+              borderColor: `${catData.color}15`,
+              color: catData.color,
+            }}
+            className="flex items-center space-x-2 border p-3 rounded-lg text-xs font-semibold"
+          >
+            <Sparkles className="w-4 h-4 shrink-0 animate-pulse" />
             <span>สรุปเนื้อหาใจความสำคัญ 3 ข้อ ด้วยปัญญาประดิษฐ์ (AI-Generated Summary)</span>
           </div>
 
@@ -181,10 +222,21 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
               points.map((point, index) => (
                 <div 
                   key={index} 
-                  className="group flex gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700/80 transition-all duration-200"
+                  style={{
+                    borderColor: `${catData.color}10`,
+                  }}
+                  className="group flex gap-4 p-4 rounded-xl bg-slate-900/35 border hover:border-slate-800 transition-all duration-200"
                 >
                   {/* Number Badge */}
-                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/10 to-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-black shrink-0 shadow-sm group-hover:from-cyan-500/20 group-hover:to-indigo-500/20 transition-all duration-200">
+                  <div 
+                    style={{
+                      background: `linear-gradient(to bottom right, ${catData.color}15, ${catData.color}02)`,
+                      borderColor: `${catData.color}35`,
+                      color: catData.color,
+                      boxShadow: `0 0 10px ${catData.color}10`
+                    }}
+                    className="flex items-center justify-center w-8 h-8 rounded-lg border text-sm font-black shrink-0"
+                  >
                     {String(index + 1).padStart(2, '0')}
                   </div>
                   {/* Point Text */}
@@ -203,7 +255,7 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
         </div>
 
         {/* Footer */}
-        <div className="p-6 bg-slate-950/85 border-t border-slate-850 flex flex-col sm:flex-row items-center gap-4 justify-between z-10">
+        <div className="p-6 bg-slate-950/85 border-t border-slate-900 flex flex-col sm:flex-row items-center gap-4 justify-between z-10">
           <div className="flex items-center text-xs text-slate-500 space-x-1.5">
             <BookOpen className="w-4 h-4" />
             <span>อ่านเพื่อรับข้อมูลสรุปที่รวดเร็ว</span>
@@ -214,7 +266,11 @@ export default function ArticleDetailModal({ article, isOpen, onClose }: Article
               href={article.original_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold text-sm shadow-md hover:shadow-lg hover:from-cyan-400 hover:to-indigo-400 transition-all duration-200 gap-1.5"
+              style={{
+                background: `linear-gradient(135deg, ${catData.color}, ${catData.color}dd)`,
+                boxShadow: `0 4px 15px ${catData.color}25`
+              }}
+              className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 rounded-lg text-white font-bold text-sm hover:brightness-110 active:scale-[0.98] transition-all duration-200 gap-1.5"
             >
               <span>อ่านข่าวต้นฉบับ</span>
               <ExternalLink className="w-4 h-4" />
