@@ -247,8 +247,13 @@ serve(async (req) => {
           });
 
         if (insertError) {
-          console.error(`DB Insert Error for URL ${originalUrl}:`, insertError.message);
-          errorCount++;
+          if (insertError.code === "23505") {
+            console.log(`Article already exists (unique constraint): ${originalUrl}`);
+            skippedCount++;
+          } else {
+            console.error(`DB Insert Error for URL ${originalUrl}:`, insertError.message);
+            errorCount++;
+          }
         } else {
           processedCount++;
         }

@@ -42,7 +42,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
-              <span className="bg-gradient-to-r from-cyan-400 to-indigo-500 text-transparent bg-clip-text font-extrabold text-xl sm:text-2xl tracking-wider transition-all group-hover:scale-105">
+              <span className="text-cyan-400 font-extrabold text-xl sm:text-2xl tracking-wider transition-all group-hover:text-cyan-300">
                 SHORTS<span className="text-white">NEWS</span>
               </span>
             </Link>
