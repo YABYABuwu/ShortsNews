@@ -73,7 +73,7 @@ export default function RegisterPage() {
 
         {success ? (
           <div className="bg-green-950/40 border border-green-800 text-green-400 p-5 rounded-lg flex flex-col items-center text-center space-y-3">
-            <CheckCircle className="w-12 h-12 text-green-400 animate-bounce" />
+            <CheckCircle className="w-12 h-12 text-green-400 animate-pulse" />
             <h3 className="text-lg font-bold">สมัครสมาชิกเสร็จสิ้น!</h3>
             <p className="text-sm text-slate-300">
               ระบบได้ส่งอีเมลยืนยันไปยังกล่องจดหมายของคุณแล้ว กรุณายืนยันตัวตนก่อนเข้าใช้งาน (กำลังพาท่านไปยังหน้าเข้าสู่ระบบ...)
